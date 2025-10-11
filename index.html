@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArkWorld</title>
+    <!-- importar scripts para firebase y firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-firestore.js"></script>
+    <style>
+        /*  Estilos de pagina global  */
+        body {
+            background-color: #0f0f0f;
+            color: #d7d9e0;
+            background-image: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 3px);
+        }
+        #title {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- cuerpo HTML -->
+    <div id="title">
+        <!-- container titulo -->
+        <h1>ArkWorld</h1>
+    </div>
+    <div id="ark">
+        <!-- container publicaciones -->
+
+    </div>
+    <script>
+        let limitePublicaciones = 10;
+        let ultimaPublicacion = null;
+        let publicacionesDisponibles = true;
+
+        // configurar Firebase (base de datos)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDKD481TieEPRwkAYPBabBhSAmT2JVG1A",
+            authDomain: "likyc-a622c.firebaseapp.com",
+            projectId: "likyc-a622c",
+            storageBucket: "likyc-a622c.firebasestorage.app",
+            messagingSenderId: "897448348799",
+            appId: "1:897448348799:web:c03bce86021535cedc834a",
+            measurementId: "measurement_ID"
+        };
+
+        // inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        // iniciar base de datos (Firestore)
+        const store = firebase.firestore();
+
+        // funcion autoejecutar carga de pagina
+        window.onload = function() {
+            // declarar donde dejar publicaciones
+            const container = document.getElementById("ark");
+            // localizador id de entradas de blog
+            const localizador = new URLSearchParams(window.location.search.slice(1)); // coje el ID de `URL/?1={ID}`
+            // Definir id localizador
+            const idLocalizador = localizador.get('q'); // coje el ID correcto (solo `?q=`)
+
+            // identificar si se esta leyendo una publi
+            if(!idLocalizador) {
+                // si no hay, cargar publis
+                pillarPublicaciones();
+            } else {
+                // si hay, cargar publi
+                store.collection("entries").where("path", "==", idLocalizador)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        container.innerHTML = `${doc.data().content}`;
+                    });
+                })
+            }
+        }
+
+        // funcion para cargar las publis
+        function pillarPublicaciones() {
+            // definir zona publis en firestore
+            const zonaPublicaciones = firebase.firestore().collection('entries');
+            // definir orden y limite publis
+            let query = zonaPublicaciones.orderBy('pnum', 'desc').limit(limitePublicaciones);
+            
+            // si es la ultima publi del limitador, que cargue a partir de alli
+            if(ultimaPublicacion) {
+                query = query.startAfter(ultimaPublicacion);
+            }
+
+            query.onSnapshot(function(snapshot) {
+                // comprobar disponiblilidad publicaciones
+                if(snapshot.size < limitePublicaciones) {
+                    publicacionesDisponibles = false;
+                    // TO-DO: funcionabilidad cargar mas publis
+                } else {
+                    return;
+                    // TO-DO: boton de cargar mas publis
+                }
+
+                // definir la carga del conjunto de publis
+                var publicaciones = snapshot.docs.map(function(publicacion) {
+                    return publicacion.data();
+                });
+
+                // pasar las publis a la funcion de incrustarPublis
+                publicaciones.forEach(function(publicacion) {
+                    incrustarPublicacion(publicacion);
+                })
+
+                // definir ultimaPubli
+                ultimaPublicacion = snapshot.docs[snapshot.docs.length - 1];
+            })
+        }
+
+        // funcion de incrustarPublis
+        function incrustarPublicacion(publicacion) {
+            // definicion de una visualizacion previa de publis
+            var publicacion = `
+            <br>
+            <a href="/?q=${publicacion.path}" style="color: white;">
+                <div style="border: 1px solid green;">
+                    <div style="position: relative;">
+                        <p style="cursor: default; postion: relative; left: 12px; padding: 8px;">${publicacion.title}</p>
+                    </div>    
+                </div>
+            </a>
+            `;
+            // incrustar publis
+            document.getElementById("ark").innerHTML += publicacion;
+        }
+    </script>
+</body>
+</html>
