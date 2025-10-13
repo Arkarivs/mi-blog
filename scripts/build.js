@@ -55,7 +55,7 @@ function eyes(){
         };
     }).filter(Boolean);
 
-    posts.sort((a,b) => a.id.localCompare(b.id));
+    posts.sort((a,b) => a.id.localeCompare(b.id));
 
     return posts;
 }
