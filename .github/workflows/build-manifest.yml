@@ -1,0 +1,35 @@
+name: buildManifest
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: nodejs setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: install dependency
+        run: npm install gray-matter
+
+      - name: manifest builder
+        run: node scripts/build.js
+
+      - name: commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "update blog index.json"
+          file_pattern: 'mango/index.json'
+          branch: ${{ github.ref_name }}
