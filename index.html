@@ -4,66 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArkWorld</title>
-    <style>
-        /*  Estilos de pagina global  */
-        body {
-            background-color: #0f0f0f;
-            color: #d7d9e0;
-            background-image: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 3px);
-        }
-        #title {
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- cuerpo HTML -->
     <div id="title">
-        <!-- container titulo -->
         <h1>ArkWorld</h1>
     </div>
-    <div id="ark">
-        <!-- container publicaciones -->
-
+    <div class="rivs">
+        <h2 style="text-transform: capitalize;">mi primera iteracion</h2>
+        <p>Esto es la primera, y continuada, iteracion de mi pagina web/blog dynamico hecho con HTML, CSS y JS.</p>
+           <p>El blog funciona con un script YML que navega la carpeta <span style="font-family: monospace; background: black; border: 0.5px solid rgba(255, 255, 255, 0.35); padding: 0.45px;">/mango/</span>, y automaticamente añade a un archivo JSON las entradas.</p>
+        <p>cursor gratuitos de aprendizage de programacion, en colaboracion con SleepingAmi de Hydraulisc</p>
     </div>
-    <script>
-        const repost = document.getElementById("ark");
-        async function publicaciones() {
-            try {
-                const respuesta = await fetch(`https://arkarivs.github.io/mi-blog/mango/index.json`, {
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                if(!respuesta.ok) {
-                    throw new Error('HTTP Error ' + respuesta.status);
-                }
-                return await respuesta.json();
-            } catch (error) {
-                console.log(error);
-                return null;
-            }
-        }
-
-        publicaciones().then(data => {
-            if(!data || !Array.isArray(data) || data.length === 0) {
-                repost.innerHTML = "<p>no post</p>";
-                return;
-            }
-            repost.innerHTML = data.map(post => {
-                const url = post.url || ('/mango/' + encodeURIComponent(post.id || ''));
-                return `
-                <br>
-                <a href="/mi-blog/?q=${post.path}" style="color: white;">
-                    <div style="border: 1px solid green;">
-                        <div style="position: relative;">
-                            <p style="cursor: default; postion: relative; left: 12px; padding: 8px;">${post.title}</p>
-                        </div>    
-                    </div>
-                </a>
-                `;
-            })
-        })
-    </script>
+    <div id="ark"></div>
+    <script src="scripts/script.js" defer></script>
 </body>
 </html>

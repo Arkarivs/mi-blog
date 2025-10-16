@@ -1,0 +1,27 @@
+/*  Estilos de pagina global  */
+body {
+    background-color: #0f0f0f;
+    color: #d7d9e0;
+    background-image: linear-gradient(to top, rgb(24, 25, 38) 60%, rgb(32, 0, 20) 100%, rgb(51, 0, 81) 60%, rgb(116, 69, 217) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+#title {
+    text-align: center;
+    border-bottom-style: solid;
+    border-color: green;
+}
+.rivs {
+    background-color: rgba(0, 25, 0, 0.35);
+    color: white;
+    width: 35%;
+    margin: 3rem auto;
+    text-align: center;
+    box-shadow: 10px 10px 10px 10px;
+    box-shadow: 0 0 20px green;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 13px;
+    padding: 50px;
+}
