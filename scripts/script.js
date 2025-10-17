@@ -26,15 +26,26 @@ publicaciones().then(publicaciones => {
 
     repost.innerHTML += limit.map(post => {
         const url = post.url || ('/mango/' + post.id || '');
+        const sano = escapeHtml(post.title);
         return `
         <br>
         <a href="/mi-blog${url}" style="color: white;">
             <div id="miid" class="miclass" style="border: 2px solid green; border-radius: 13px;">
                 <div style="position: relative;">
-                    <p style="cursor: default; postion: relative; left: 12px; padding: 8px;">${post.title}</p>
+                    <p style="cursor: default; postion: relative; left: 12px; padding: 8px;">${sano}</p>
                 </div>    
             </div>
         </a>
         `;
-    })
+    }).join('\n');
 })
+
+// small helper to avoid XSS when inserting strings
+function escapeHtml(str) {
+return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
