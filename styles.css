@@ -7,11 +7,32 @@ body {
     background-attachment: fixed;
     background-position: center;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    text-transform: capitalize;
+}
+
+p a {
+    background-color: aqua;
+    color:#0f0f0f;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: larger;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 #title {
     text-align: center;
     border-bottom-style: solid;
     border-color: green;
 }
+
 .rivs {
     background-color: rgba(0, 25, 0, 0.35);
     color: white;
@@ -24,4 +45,10 @@ body {
     backdrop-filter: blur(20px);
     border-radius: 13px;
     padding: 50px;
+}
+
+@media only screen and (max-width: 600px) {
+    .rivs {
+        width: 68%;
+    }
 }

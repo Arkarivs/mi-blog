@@ -16,15 +16,15 @@ async function publicaciones() {
     }
 }
 
-publicaciones().then(data => {
-    if(!data || !Array.isArray(data) || data.length === 0) {
+publicaciones().then(publicaciones => {
+    if(!publicaciones || !Array.isArray(publicaciones) || publicaciones.length === 0) {
         repost.innerHTML = "<p>no post</p>";
         return;
     }
 
-    const limit = data.slice(0, 3);
+    const limit = publicaciones.slice(0, 3);
 
-    repost.innerHTML = limit.map(post => {
+    repost.innerHTML += limit.map(post => {
         const url = post.url || ('/mango/' + post.id || '');
         return `
         <br>
